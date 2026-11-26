@@ -1,0 +1,298 @@
+<!doctype html>
+<html lang="da">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <meta name="theme-color" content="#0c3b2e">
+  <meta name="description" content="Demo af Lyngbygaard Golfs gæsteapp til Company Days.">
+  <link rel="manifest" href="./app.webmanifest">
+  <link rel="apple-touch-icon" href="./app-icon-192.png">
+  <title>LYG Company Day</title>
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Ccircle cx='32' cy='32' r='30' fill='%230c3b2e'/%3E%3Cpath d='M31 12v34' stroke='white' stroke-width='4'/%3E%3Cpath d='M33 14l18 7-18 7z' fill='%23d6b467'/%3E%3Cellipse cx='32' cy='49' rx='19' ry='5' fill='%236eb44d'/%3E%3C/svg%3E">
+  <style>
+    :root{--green:#0c3b2e;--green2:#195b45;--lime:#79b746;--gold:#d6b467;--cream:#f6f3ea;--ink:#16211d;--muted:#63716b;--line:#dce3df;--white:#fff;--shadow:0 18px 50px rgba(12,59,46,.13)}
+    *{box-sizing:border-box}html{font-size:16px;scroll-behavior:smooth}body{margin:0;background:#edf2ef;color:var(--ink);font-family:Inter,ui-sans-serif,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;line-height:1.45}button,a{font:inherit}button{cursor:pointer}a{color:inherit}.app{min-height:100vh;padding-bottom:86px}.topbar{height:68px;background:rgba(8,44,34,.97);color:white;display:flex;align-items:center;justify-content:space-between;padding:0 18px;position:sticky;top:0;z-index:50;box-shadow:0 5px 22px rgba(0,0,0,.18)}.brand{display:flex;align-items:center;gap:11px}.brand img{width:44px;height:44px;object-fit:contain;background:white;border-radius:11px;padding:4px}.brand strong{display:block;font-size:.98rem}.brand span{display:block;font-size:.72rem;color:#cfe1da}.demo-pill{border:1px solid rgba(255,255,255,.28);border-radius:999px;padding:6px 9px;font-size:.72rem;font-weight:800;letter-spacing:.08em}
+    .view{display:none;animation:fade .22s ease}.view.active{display:block}@keyframes fade{from{opacity:.45;transform:translateY(4px)}to{opacity:1;transform:none}}.hero{min-height:610px;height:calc(100vh - 68px);max-height:820px;position:relative;color:white;display:flex;align-items:flex-end;overflow:hidden;background:linear-gradient(180deg,rgba(5,25,19,.1) 0%,rgba(5,25,19,.34) 50%,rgba(5,25,19,.94) 100%),url('balls-air-logo.png') center/cover no-repeat,url('course-original.png') center/cover no-repeat}.hero-inner{width:min(100%,760px);margin:0 auto;padding:34px 22px 52px;position:relative;z-index:2}.event-tag{display:inline-flex;align-items:center;gap:8px;background:rgba(255,255,255,.94);color:var(--green);border-radius:999px;padding:8px 12px;font-weight:850;font-size:.78rem;box-shadow:0 6px 18px rgba(0,0,0,.16)}.hero h1{font-size:clamp(2.4rem,10vw,4.6rem);line-height:.94;margin:19px 0 14px;letter-spacing:-.05em;text-wrap:balance}.hero h1 span{color:#f2d58f}.hero-date{font-size:1.06rem;margin:0 0 24px;color:#eef7f3}.hero-company{display:flex;align-items:center;gap:11px;margin-bottom:18px}.company-logo{width:54px;height:54px;background:white;border-radius:12px;display:grid;place-items:center;color:var(--green);font-weight:900;font-size:.7rem;text-align:center;padding:5px}.hero-company strong{font-size:1.05rem}.cta{border:0;border-radius:14px;background:var(--lime);color:#0b291f;font-weight:900;padding:14px 18px;display:inline-flex;align-items:center;justify-content:center;gap:8px;text-decoration:none;box-shadow:0 10px 25px rgba(0,0,0,.2)}.cta.secondary{background:var(--green);color:white;box-shadow:none}.cta.light{background:white;color:var(--green);box-shadow:none}.scroll-cue{position:absolute;right:22px;bottom:24px;color:rgba(255,255,255,.75);font-size:.72rem;writing-mode:vertical-rl;letter-spacing:.12em;text-transform:uppercase}
+    .page{max-width:780px;margin:0 auto;padding:26px 18px 34px}.eyebrow{margin:0 0 6px;color:var(--green2);font-weight:900;letter-spacing:.12em;text-transform:uppercase;font-size:.74rem}.page h2{font-size:clamp(1.75rem,7vw,2.45rem);line-height:1.08;margin:0 0 12px;color:var(--green);letter-spacing:-.025em}.lead{font-size:1.03rem;color:var(--muted);margin:0 0 22px}.card{background:white;border:1px solid var(--line);border-radius:20px;box-shadow:var(--shadow);padding:20px}.grid{display:grid;gap:14px}.quick-grid{grid-template-columns:1fr 1fr;margin-top:-28px;position:relative;z-index:5;padding:0 18px}.quick{background:white;border-radius:17px;padding:16px;box-shadow:var(--shadow);border:1px solid rgba(12,59,46,.08)}.quick svg{width:24px;height:24px;color:var(--green2)}.quick small{display:block;color:var(--muted);font-weight:700;margin-top:10px}.quick strong{display:block;color:var(--green);margin-top:2px}.section-promo{margin:25px 18px 0;background:var(--green);color:white;border-radius:22px;padding:23px;box-shadow:var(--shadow)}.section-promo h2{font-size:1.45rem;margin:0 0 8px}.section-promo p{margin:0 0 17px;color:#dcebe5}
+    .timeline{margin-top:24px}.timeline-item{display:grid;grid-template-columns:62px 18px 1fr;gap:10px;min-height:84px}.timeline-item time{font-weight:900;color:var(--green);font-size:.92rem}.rail{position:relative}.rail:before{content:"";position:absolute;left:8px;top:12px;bottom:-10px;width:2px;background:#c9d8d1}.rail:after{content:"";position:absolute;left:2px;top:5px;width:14px;height:14px;border-radius:50%;background:var(--gold);box-shadow:0 0 0 4px #f5ecd8}.timeline-item:last-child .rail:before{display:none}.timeline-item h3{font-size:1rem;margin:0 0 4px;color:var(--green)}.timeline-item p{margin:0;color:var(--muted);font-size:.9rem}.notice{margin-top:18px;background:#fff7e3;border:1px solid #ead39a;border-radius:15px;padding:14px;color:#5b4a24}
+    .feature{display:grid;grid-template-columns:44px 1fr;gap:13px;align-items:start;padding:16px 0;border-bottom:1px solid var(--line)}.feature:last-child{border:0}.icon{width:44px;height:44px;border-radius:13px;background:#eaf2ed;color:var(--green);display:grid;place-items:center}.icon svg{width:23px;height:23px}.feature h3{margin:1px 0 3px;font-size:1rem;color:var(--green)}.feature p{margin:0;color:var(--muted);font-size:.91rem}.steps{counter-reset:step}.step{position:relative;padding:0 0 22px 52px}.step:before{counter-increment:step;content:counter(step);position:absolute;left:0;top:0;width:36px;height:36px;border-radius:50%;display:grid;place-items:center;background:var(--green);color:white;font-weight:900}.step:not(:last-child):after{content:"";position:absolute;left:17px;top:40px;bottom:4px;width:2px;background:#cbd9d2}.step h3{margin:0 0 3px;color:var(--green)}.step p{margin:0;color:var(--muted)}.benefits{display:flex;gap:8px;flex-wrap:wrap;margin:15px 0 21px}.benefits span{background:#edf4ef;color:var(--green);border-radius:999px;padding:8px 11px;font-weight:750;font-size:.82rem}.quote{background:var(--cream);border-left:4px solid var(--gold);padding:16px 18px;margin:18px 0;border-radius:0 14px 14px 0;color:#4d493e;font-style:italic}
+    .business-hero{background:linear-gradient(135deg,var(--green),#207055);color:white;border-radius:23px;padding:26px 22px;margin-bottom:16px;overflow:hidden;position:relative}.business-hero:after{content:"";position:absolute;width:160px;height:160px;border:2px solid rgba(214,180,103,.45);border-radius:50%;right:-55px;top:-70px}.business-hero h2{color:white}.business-hero p{color:#dbece5}.contact-card{background:var(--green);color:white;border-radius:22px;padding:22px;margin-top:18px}.contact-card h3{margin:0 0 8px}.contact-card p{margin:0 0 17px;color:#dcebe5}.contact-actions{display:flex;gap:9px;flex-wrap:wrap}.contact-link{display:inline-flex;align-items:center;gap:7px;text-decoration:none;background:white;color:var(--green);padding:11px 13px;border-radius:12px;font-weight:850}
+    .bottom-nav{position:fixed;left:50%;bottom:0;transform:translateX(-50%);width:min(100%,780px);height:76px;background:rgba(255,255,255,.97);border-top:1px solid var(--line);display:grid;grid-template-columns:repeat(5,1fr);z-index:70;padding:7px max(6px,env(safe-area-inset-right)) calc(6px + env(safe-area-inset-bottom));box-shadow:0 -8px 30px rgba(12,59,46,.1);backdrop-filter:blur(12px)}.nav-btn{border:0;background:transparent;color:#718079;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;border-radius:11px;font-size:.64rem;font-weight:800}.nav-btn svg{width:21px;height:21px}.nav-btn.active{color:var(--green);background:#edf4f0}.external-note{font-size:.75rem;color:var(--muted);margin-top:10px}
+    @media(min-width:760px){body{background:#dfe7e3}.app{max-width:780px;margin:0 auto;background:#f3f6f4;box-shadow:0 0 50px rgba(12,59,46,.16)}.hero-inner{padding-left:46px;padding-right:46px}.quick-grid{padding:0 46px}.section-promo{margin-left:46px;margin-right:46px}.page{padding-left:46px;padding-right:46px}.bottom-nav{border-left:1px solid var(--line);border-right:1px solid var(--line)}}
+    @media(max-width:390px){.hero{min-height:560px}.hero-inner{padding-bottom:36px}.hero h1{font-size:2.55rem}.quick-grid{grid-template-columns:1fr}.bottom-nav{height:72px}.nav-btn{font-size:.58rem}}
+    .install-guide{max-width:720px;margin:12px auto;padding:0 20px}
+    .install-guide summary{cursor:pointer;text-decoration:underline}
+    @media (display-mode:standalone){.install-guide{display:none}}
+  [hidden]{display:none!important}.notice,#guest-extras p{white-space:pre-line}.company-logo img{max-width:100%;max-height:100%;object-fit:contain}.bottom-nav{grid-template-columns:repeat(var(--nav-count,5),1fr)}
+.event-details{margin-top:18px}.event-details h3{margin:0 0 8px}.event-details ul{list-style:none;margin:0;padding:0}.event-details li{padding:10px 0;overflow-wrap:anywhere}.event-details li+li{border-top:1px solid var(--line)}.event-details li span{display:block;color:var(--muted);white-space:pre-line}.example-label{margin:0;color:var(--muted)}
+    .opening{position:fixed;inset:0;z-index:90;display:grid;align-items:center;overflow:auto;color:#fff;
+      background:linear-gradient(90deg,rgba(6,32,24,.95),rgba(6,32,24,.76) 58%,rgba(6,32,24,.36)),url('course-original.png') center/cover}
+    .opening-content{width:min(100%,66rem);margin:auto;padding:clamp(1.4rem,7vw,5rem);animation:opening-reveal .45s ease-out both}
+    .opening-content>img{display:block;width:64px;height:64px;object-fit:contain;padding:6px;background:#fff;border-radius:8px}
+    .opening-label{margin:1.8rem 0 .55rem;color:#f1d59a;font-size:1rem;font-weight:700}
+    .opening-company{margin:0;max-width:19ch;color:var(--cream);font-size:clamp(2.4rem,8vw,5rem);font-weight:750;line-height:1.04;letter-spacing:-.035em;overflow-wrap:anywhere}
+    .opening-date{margin:1rem 0 0;color:#fff;font-size:1rem}
+    .opening-roll{position:relative;width:min(100%,28rem);height:var(--ball-size);margin-top:1.15rem;
+      --ball-size:clamp(4rem,12vw,5.5rem)}
+    .opening-roll:before{content:"";position:absolute;bottom:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,#d6b467bb,transparent)}
+    .opening-ball{position:absolute;bottom:2px;left:0;width:var(--ball-size);aspect-ratio:1;animation:opening-roll 1.65s cubic-bezier(.15,.55,.27,1) both}
+    .opening-ball:before{content:"";position:absolute;inset:12% 4% -5%;border-radius:50%;background:#04140f;filter:blur(5px);transform:scaleY(.35) translateY(75%)}
+    .opening-ball:after{content:"";position:absolute;inset:0;border-radius:50%;background:
+      radial-gradient(circle at 33% 24%,#fff7,transparent 56%),
+      radial-gradient(circle at 42% 39%,#f7f7ec 0%,#c1c6b7 61%,#6f7c72 95%);
+      box-shadow:inset -2px -2px 5px #34483f45}
+    .opening-ball-texture{position:absolute;z-index:1;inset:0;border-radius:50%;opacity:.65;
+      background:radial-gradient(circle at 48% 44%,#33433b50 8%,#63716745 22%,#fff9 34%,transparent 47%) 0 0/7px 7px;
+      mask-image:radial-gradient(circle,#000 57%,transparent 75%);animation:opening-spin 1.65s cubic-bezier(.15,.55,.27,1) both}
+    .opening-ball-brand{position:absolute;z-index:2;inset:0;display:grid;place-items:center;border-radius:50%;
+      animation:opening-spin 1.65s cubic-bezier(.15,.55,.27,1) both}
+    .opening-ball-brand img{display:block;width:64%;height:46%;object-fit:contain}
+    .opening-ball-brand span{display:-webkit-box;width:72%;overflow:hidden;-webkit-box-orient:vertical;-webkit-line-clamp:2;overflow-wrap:anywhere;
+      text-align:center;color:#163e30;font-size:clamp(.58rem,2vw,.72rem);font-weight:850;line-height:1.05}
+    @keyframes opening-roll{from{left:0;opacity:0}14%{opacity:1}to{left:calc(100% - var(--ball-size));opacity:1}}
+    @keyframes opening-spin{to{transform:rotate(720deg)}}
+    .opening-skip{margin-top:1.6rem;padding:.55rem .95rem;min-height:44px;border:1px solid #ffffff80;border-radius:8px;color:#fff;background:#0c3b2e}
+    @keyframes opening-reveal{from{opacity:0;transform:translateY(5px)}to{opacity:1;transform:none}}
+    #day-dialog{width:min(calc(100% - 2rem),29rem);max-height:calc(100dvh - 2rem);border:1px solid var(--line);border-radius:22px;padding:1.35rem;color:var(--green);background:var(--cream);box-shadow:var(--shadow)}
+    #day-dialog::backdrop{background:#062c23b0}#day-dialog h2{margin:0 0 .7rem;font-size:1.75rem}#day-dialog dt{font-weight:800}#day-dialog dd{margin:0 0 1rem;color:var(--ink);white-space:pre-line}
+    #day-dialog .cta{box-shadow:none}#open-day-info{margin:1rem 18px 0}#open-day-info:focus-visible,#day-dialog button:focus-visible,.opening-skip:focus-visible{outline:3px solid var(--gold);outline-offset:3px}
+    @media(prefers-reduced-motion:reduce){.opening-content,.opening-ball,.opening-ball-texture,.opening-ball-brand{animation:none}}
+    .hero-inner{padding-bottom:clamp(2.75rem,8vw,5rem)}
+    .hero h1{line-height:1;max-width:16ch}
+    .hero .cta{background:#e6ce94;color:#15362a;border-radius:9px;box-shadow:none}
+    .event-tag{border-radius:7px;background:#f6f3ea;color:#15362a;box-shadow:none}
+    .quick,.card,.section-promo,.business-hero{border-radius:14px}
+    .quick,.card{box-shadow:0 4px 16px rgba(12,59,46,.07)}
+    .quick small,.quick strong{font-size:.95rem}
+    .timeline-item p,.feature p{font-size:1rem}
+    .cta:focus-visible{outline:3px solid #9f7020;outline-offset:3px}
+    .bottom-nav{background:#faf8f1}
+    .nav-btn{min-width:0;gap:4px;color:#264638;font-size:.75rem;line-height:1.05}
+    .nav-btn svg{box-sizing:content-box;width:19px;height:19px;padding:7px;border:2px solid transparent;border-radius:50%;flex:none;
+      background:linear-gradient(145deg,#235846,#0c3b2e);color:#f6edda;box-shadow:0 2px 5px #0c3b2e28}
+    .nav-btn.active{color:#0c3b2e;background:#f0e8d6}.nav-btn.active svg{border-color:#d6b467}
+    .nav-btn:focus-visible{outline:2px solid #66501f;outline-offset:-2px}
+    @media(max-width:350px){.nav-btn{font-size:.68rem}.nav-btn svg{padding:6px}}
+    .app{--nav-height:76px}.bottom-nav{height:var(--nav-height)}
+    #event-bulletin{position:fixed;z-index:69;left:50%;bottom:var(--nav-height);transform:translateX(-50%);width:min(100%,780px);
+      display:grid;grid-template-columns:auto minmax(0,1fr) auto;align-items:center;min-height:44px;gap:.55rem;padding:0 .75rem;
+      background:#f0dfb7;color:#243422;box-shadow:0 -3px 12px #0c3b2e15;font-size:.88rem}
+    #event-bulletin strong{color:var(--green)}
+    .bulletin-window{overflow:hidden;white-space:nowrap}
+    .bulletin-message{display:inline-block;padding-left:100%;animation:bulletin-scroll var(--bulletin-speed,16s) linear infinite}
+    @keyframes bulletin-scroll{to{transform:translateX(-100%)}}
+    #event-bulletin button{min-height:44px;padding:0 .4rem;background:none;border:0;color:var(--green);text-decoration:underline;font-size:.85rem}
+    #event-bulletin[data-paused=true] .bulletin-window{overflow:auto}
+    #event-bulletin[data-paused=true] .bulletin-message{animation:none;padding-left:0}
+    .app:has(#event-bulletin:not([hidden])){padding-bottom:calc(var(--nav-height) + 56px)}
+    #event-contacts{margin-top:1.25rem}#event-contacts p{white-space:pre-line;overflow-wrap:anywhere}.event-contact-links{display:flex;gap:.9rem;flex-wrap:wrap}.event-contact-links a{display:inline-flex;align-items:center;min-height:44px;color:var(--green);font-weight:700;overflow-wrap:anywhere}
+    .brasserie-link{margin-top:1rem}
+    @media(max-width:390px){.app{--nav-height:72px}}
+    @media(prefers-reduced-motion:reduce){
+      #event-bulletin{grid-template-columns:auto minmax(0,1fr)}
+      #event-bulletin button{display:none}
+      .bulletin-window{overflow:auto}
+      .bulletin-message{padding-left:0;animation:none}
+    }
+    .sponsor-block{margin:1.25rem auto;width:min(calc(100% - 36px),744px)}.page .sponsor-block{width:100%}
+    .sponsor-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,220px),1fr));gap:.75rem}.sponsor-card{overflow-wrap:anywhere}.sponsor-card img{width:auto;max-width:100%;height:3rem;object-fit:contain;object-position:left center;display:block;margin-bottom:.5rem}.sponsor-card p{white-space:pre-line;margin:.35rem 0}.sponsor-card a{display:inline-flex;align-items:center;min-height:44px;font-weight:700;color:var(--green)}
+.shortcuts{display:flex;flex-wrap:wrap;gap:.5rem;margin-top:.75rem}.shortcuts button{min-height:44px;background:#0c3b2e;color:white;border:1px solid #fff8;border-radius:8px;padding:.45rem .7rem;font-weight:700}
+#guest-starts,#guest-prizes,#guest-weather{scroll-margin-top:84px}#guest-weather{margin-top:1.2rem}#weather-start{min-height:44px;font:inherit;max-width:100%}
+#guest-weather table{width:100%;border-collapse:collapse}#guest-weather th,#guest-weather td{text-align:left;font-size:.88rem;padding:.45rem .15rem;border-bottom:1px solid var(--line)}
+#guest-weather a{display:inline-flex;min-height:44px;align-items:center;font-weight:700}
+</style>
+</head>
+<body><p id="guest-status" role="status" style="padding:1rem" hidden></p>
+<div class="opening" id="opening" hidden>
+  <div class="opening-content">
+    <img src="lyg-logo.png" alt="Lyngbygaard Golf">
+    <p class="opening-label">Company Day</p>
+    <p class="opening-company"></p>
+    <p class="opening-date" hidden></p>
+    <div class="opening-roll" aria-hidden="true"><span class="opening-ball"><span class="opening-ball-texture"></span><span class="opening-ball-brand"></span></span></div>
+    <button class="opening-skip" type="button">Gå til appen</button>
+  </div>
+</div>
+<dialog id="day-dialog" aria-labelledby="day-title">
+  <p class="eyebrow" id="day-demo" hidden>Eksempel</p>
+  <h2 id="day-title">Kort info til dagen</h2>
+  <dl>
+    <div id="day-weather" hidden><dt>Vejr</dt><dd></dd></div>
+    <div id="day-clothing" hidden><dt>Påklædning</dt><dd></dd></div>
+  </dl>
+  <form method="dialog"><button class="cta secondary" autofocus>Fortsæt til appen</button></form>
+</dialog>
+<div class="app">
+  <header class="topbar">
+    <div class="brand"><img src="lyg-logo.png" alt="Lyngbygaard Golf"><div><strong>Lyngbygaard Golf</strong><span>Company Day</span></div></div>
+    <span class="demo-pill">DEMO</span><a class="cta secondary" id="edit-events" href="/admin" hidden>Administration</a>
+  </header>
+
+  <main>
+    <section id="home" class="view active">
+      <div class="hero">
+        <div class="hero-inner">
+          <div class="event-tag">Jeres dag på Lyngbygaard</div>
+          <h1>Velkommen til<br><span>Company Day</span></h1>
+          <div class="hero-company"><div class="company-logo">JERES<br>LOGO</div><div><small>Demo for</small><br><strong>Nordic Operations</strong></div></div>
+          <p class="hero-date">Torsdag den 24. september 2026</p>
+          <button class="cta" data-go="program">Se dagens program</button>
+          <div class="shortcuts">
+            <button type="button" data-go="guest-starts">Starttider</button>
+            <button type="button" data-go="guest-prizes">Præmier</button>
+            <button type="button" data-go="guest-weather">Vejr og radar</button>
+          </div>
+        </div>
+        <span class="scroll-cue">Lyngbygaard Golf</span>
+      </div>
+      <div class="grid quick-grid">
+        <div class="quick"><svg aria-hidden="true"><use href="#clock"/></svg><small>Mødetid</small><strong>Kl. 08.30</strong></div>
+        <div class="quick"><svg aria-hidden="true"><use href="#pin"/></svg><small>Mødested</small><strong>Klubhuset</strong></div>
+      </div>
+      <button type="button" class="cta secondary" id="open-day-info" hidden>Dagens info</button>
+      <div id="guest-welcome" class="notice" hidden></div><div class="section-promo">
+        <h2>Mere end en golfdag</h2>
+        <p>Oplev banen, fællesskabet og mulighederne for at fortsætte med golf – både som ny spiller og som virksomhed.</p>
+        <button class="cta light" data-go="club">Oplev klubben</button>
+      </div>
+      <section id="home-sponsors" class="sponsor-block" hidden><h2>Sponsorer</h2><div class="sponsor-grid"></div></section>
+    </section>
+
+    <section id="program" class="view page">
+      <p class="eyebrow">Torsdag 24. september</p>
+      <h2>Dagens program</h2>
+      <p class="lead">Alt det praktiske samlet ét sted. Tiderne er eksempeldata til demoen.</p>
+      <div class="card timeline">
+        <div class="timeline-item"><time>08.30</time><span class="rail"></span><div><h3>Ankomst og morgenmad</h3><p>Registrering i klubhuset, kaffe og let morgenmad.</p></div></div>
+        <div class="timeline-item"><time>09.15</time><span class="rail"></span><div><h3>Velkomst og briefing</h3><p>Dagens format, hold og praktiske informationer.</p></div></div>
+        <div class="timeline-item"><time>09.45</time><span class="rail"></span><div><h3>Opvarmning</h3><p>Range, putting og korte slag med klubbens trænerteam.</p></div></div>
+        <div class="timeline-item"><time>10.30</time><span class="rail"></span><div><h3>Gunstart</h3><p>Holdene sendes ud på banen. Der er konkurrencer undervejs.</p></div></div>
+        <div class="timeline-item"><time>15.30</time><span class="rail"></span><div><h3>Omklædning og pause</h3><p>Mulighed for forfriskning i klubhuset.</p></div></div>
+        <div class="timeline-item"><time>16.30</time><span class="rail"></span><div><h3>Middag og præmier</h3><p>Fælles afslutning i Brasseriet.</p></div></div>
+      </div>
+      <div class="notice"><strong>Husk:</strong> Praktisk tøj og sko efter vejret. Udstyr kan aftales med klubben.</div>
+      <section id="guest-starts" class="card event-details">
+        <h3>Starttider</h3>
+        <p class="example-label">Eksempel på gunstart</p>
+        <ul><li><strong>Kl. 10.30 · Hold 1</strong><span>Hul 1</span></li><li><strong>Kl. 10.30 · Hold 2</strong><span>Hul 4</span></li></ul>
+      </section>
+      <section id="guest-prizes" class="card event-details">
+        <h3>Præmier</h3>
+        <p class="example-label">Eksempel på præmiekategorier</p>
+        <ul><li><strong>Bedste hold</strong></li><li><strong>Nærmest flaget</strong></li><li><strong>Længste drive</strong></li></ul>
+      </section>
+      <section id="guest-weather" class="card event-details">
+        <h3>Vejret på Lyngbygaard</h3>
+        <label id="weather-choice" hidden>Vælg starttid <select id="weather-start"></select></label>
+        <p id="weather-status" role="status"></p>
+        <table hidden><thead><tr><th scope="col">Kl.</th><th scope="col">Temp.</th><th scope="col">Nedbør</th><th scope="col">Vind</th></tr></thead><tbody></tbody></table>
+        <p id="weather-credit" hidden>Prognose fra <a href="https://www.met.no/" target="_blank" rel="noopener">MET Norway</a></p>
+        <a href="https://www.dmi.dk/radar" target="_blank" rel="noopener">Åbn DMI’s nedbørsradar</a>
+      </section>
+      <section id="program-sponsors" class="sponsor-block" hidden><h3>Sponsorer</h3><div class="sponsor-grid"></div></section>
+      <div id="guest-extras"></div>
+      <section id="event-contacts" class="event-details" hidden>
+        <h3>Kontaktpersoner</h3>
+        <div class="sponsor-grid"></div>
+      </section>
+      <a class="cta secondary brasserie-link" href="https://lyg.dk/brasseriet/" target="_blank" rel="noopener">Besøg Brasseriet</a>
+    </section>
+
+    <section id="club" class="view page">
+      <p class="eyebrow">The place to play</p>
+      <h2>Velkommen til Lyngbygaard Golf</h2>
+      <p class="lead">Golf, natur og fællesskab tæt på Aarhus – med rammer til både medlemmer, gæster og virksomheder.</p>
+      <div class="card">
+        <div class="feature"><span class="icon"><svg><use href="#flag"/></svg></span><div><h3>Golfoplevelser for alle</h3><p>Baner og træningsområder med plads til både begyndere og erfarne spillere.</p></div></div>
+        <div class="feature"><span class="icon"><svg><use href="#people"/></svg></span><div><h3>Et aktivt fællesskab</h3><p>Turneringer, klubber i klubben og sociale aktiviteter gennem sæsonen.</p></div></div>
+        <div class="feature"><span class="icon"><svg><use href="#cup"/></svg></span><div><h3>Klubhus og Brasserie</h3><p>Gode rammer før og efter runden – også til møder og arrangementer.</p></div></div>
+      </div>
+      <div class="quote">“Golf handler ikke kun om slagene – men om roen, fællesskabet og glæden ved at lære noget nyt.”</div>
+      <a class="cta secondary" href="https://lyg.dk/klubben/" target="_blank" rel="noopener">Læs mere om klubben</a>
+      <a class="cta secondary brasserie-link" href="https://lyg.dk/brasseriet/" target="_blank" rel="noopener">Besøg Brasseriet</a>
+    </section>
+
+    <section id="beginner" class="view page">
+      <p class="eyebrow">Har du fået lyst til mere?</p>
+      <h2>Kom godt i gang med golf</h2>
+      <p class="lead">Lyngbygaard tilbyder et struktureret begynderforløb, hvor nye spillere lærer teknik, regler og livet i klubben.</p>
+      <div class="card steps">
+        <div class="step"><h3>Velkomst og introduktion</h3><p>Du møder trænerne og de andre deltagere og får overblik over forløbet.</p></div>
+        <div class="step"><h3>Træning med PGA-professionelle</h3><p>Grundlæggende teknik på range, puttinggreen og indspilsområde.</p></div>
+        <div class="step"><h3>Regler og banevejledning</h3><p>Du lærer sikkerhed, etikette og de vigtigste regler på banen.</p></div>
+        <div class="step"><h3>Spil og fællesskab</h3><p>BegynderMix og fællestræning hjælper dig trygt videre.</p></div>
+      </div>
+      <div class="benefits"><span>Lån af udstyr</span><span>Træningsbolde</span><span>Klubfællesskab</span><span>Almindeligt eller turbo</span></div>
+      <a class="cta secondary" href="https://lyg.dk/begyndergolf/" target="_blank" rel="noopener">Se begynderforløbet</a>
+      <p class="external-note">Åbner Lyngbygaard Golfs officielle side med aktuelle hold og tilmelding.</p>
+    </section>
+
+    <section id="business" class="view page">
+      <div class="business-hero">
+        <p class="eyebrow" style="color:#f2d58f">Netværk · relationer · oplevelser</p>
+        <h2>Erhvervsklubben</h2>
+        <p>Brug golfen som ramme om stærke relationer, nye forbindelser og gode oplevelser med kunder og medarbejdere.</p>
+      </div>
+      <div class="card">
+        <div class="feature"><span class="icon"><svg><use href="#network"/></svg></span><div><h3>Et aktivt erhvervsnetværk</h3><p>Mød andre virksomheder i uformelle rammer med golfen som fælles platform.</p></div></div>
+        <div class="feature"><span class="icon"><svg><use href="#calendar"/></svg></span><div><h3>Arrangementer gennem året</h3><p>Golfdage, netværksmøder og oplevelser for medlemmer og gæster.</p></div></div>
+        <div class="feature"><span class="icon"><svg><use href="#briefcase"/></svg></span><div><h3>Synlighed og værtskab</h3><p>Muligheder for sponsorater, Company Days, møder og konferencer.</p></div></div>
+      </div>
+      <div class="contact-card"><h3>Vil din virksomhed være med?</h3><p>Kontakt Lyngbygaard Golf og hør om mulighederne i erhvervsklubben.</p><div class="contact-actions"><a class="contact-link" href="https://lyg.dk/erhverv/" target="_blank" rel="noopener">Se erhvervsklubben</a><a class="contact-link" href="tel:+4587441070">Ring 87 44 10 70</a></div></div>
+    </section>
+    <details class="install-guide">
+      <summary>Installér appen</summary>
+      <p><button type="button" id="install-app" hidden>Installér på denne enhed</button></p>
+      <p><strong>Windows og Mac</strong> — Se efter installationsmuligheden i Chrome eller Edge. I Safari på Mac vælger du <strong>Arkiv → Føj til Dock</strong>.</p>
+      <p><strong>iPhone og iPad</strong> — I Safari vælger du <strong>Del → Føj til hjemmeskærm</strong>.</p>
+      <p><strong>Android</strong> — I Chrome vælger du <strong>Installér app</strong> eller <strong>Føj til startskærm</strong> i browsermenuen.</p>
+    </details>
+  </main>
+
+  <aside id="event-bulletin" aria-label="Besked om arrangementet" hidden>
+    <strong>Aktuelt</strong>
+    <div class="bulletin-window" tabindex="0"><span class="bulletin-message"></span></div>
+    <button type="button" aria-label="Stop rulning af infobjælken">Pause</button>
+  </aside>
+  <nav class="bottom-nav" aria-label="Hovedmenu">
+    <button class="nav-btn active" data-go="home"><svg><use href="#homeIcon"/></svg><span>Velkommen</span></button>
+    <button class="nav-btn" data-go="program"><svg><use href="#calendar"/></svg><span>Program</span></button>
+    <button class="nav-btn" data-go="club"><svg><use href="#flag"/></svg><span>Klubben</span></button>
+    <button class="nav-btn" data-go="beginner"><svg aria-hidden="true"><use href="#lessonIcon"/></svg><span>Begynder</span></button>
+    <button class="nav-btn" data-go="business"><svg><use href="#briefcase"/></svg><span>Erhverv</span></button>
+  </nav>
+</div>
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs>
+    <symbol id="lessonIcon" viewBox="0 0 24 24"><path d="m17 4-7 12c-.6 1-1.9 1.5-3.1 1.5H4v2.2h4.1c1.6 0 3.1-.9 3.9-2.2L19.4 5" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/><circle cx="17.5" cy="18.5" r="1.5" fill="currentColor"/></symbol>
+    <symbol id="homeIcon" viewBox="0 0 24 24"><path d="M3 11.5 12 4l9 7.5v8a1 1 0 0 1-1 1h-5v-6H9v6H4a1 1 0 0 1-1-1z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></symbol>
+    <symbol id="calendar" viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="16" rx="2" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M7 3v4m10-4v4M3 10h18" stroke="currentColor" stroke-width="1.8"/></symbol>
+    <symbol id="clock" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M12 7v6l4 2" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></symbol>
+    <symbol id="pin" viewBox="0 0 24 24"><path d="M12 22s7-6.4 7-13a7 7 0 1 0-14 0c0 6.6 7 13 7 13z" fill="none" stroke="currentColor" stroke-width="1.8"/><circle cx="12" cy="9" r="2.3" fill="none" stroke="currentColor" stroke-width="1.8"/></symbol>
+    <symbol id="flag" viewBox="0 0 24 24"><path d="M6 22V3m0 2h11l-2.5 4L17 13H6" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></symbol>
+    <symbol id="people" viewBox="0 0 24 24"><circle cx="9" cy="8" r="3" fill="none" stroke="currentColor" stroke-width="1.8"/><circle cx="17" cy="9" r="2.3" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M3 20c.4-4 2.3-6 6-6s5.6 2 6 6m0-5c3.6 0 5.4 1.7 5.8 5" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></symbol>
+    <symbol id="cup" viewBox="0 0 24 24"><path d="M7 4h10v4c0 4-2 7-5 7s-5-3-5-7zm0 2H4v2c0 2 1.5 3 3.5 3M17 6h3v2c0 2-1.5 3-3.5 3M12 15v4m-4 2h8" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+    <symbol id="briefcase" viewBox="0 0 24 24"><rect x="3" y="7" width="18" height="13" rx="2" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M9 7V4h6v3m-12 5h18m-11 0v2h4v-2" fill="none" stroke="currentColor" stroke-width="1.8"/></symbol>
+    <symbol id="network" viewBox="0 0 24 24"><circle cx="12" cy="5" r="2.5" fill="none" stroke="currentColor" stroke-width="1.8"/><circle cx="5" cy="18" r="2.5" fill="none" stroke="currentColor" stroke-width="1.8"/><circle cx="19" cy="18" r="2.5" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="m10.7 7.2-4.4 8.5m7-8.5 4.4 8.5M7.5 18h9" fill="none" stroke="currentColor" stroke-width="1.8"/></symbol>
+    <symbol id="spark" viewBox="0 0 24 24"><path d="M12 2l1.8 6.2L20 10l-6.2 1.8L12 18l-1.8-6.2L4 10l6.2-1.8zm7 14 .8 2.2L22 19l-2.2.8L19 22l-.8-2.2L16 19l2.2-.8z" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/></symbol>
+  </defs>
+</svg>
+<script>
+  const views=[...document.querySelectorAll('.view')],buttons=[...document.querySelectorAll('[data-go]')];
+  function show(id){
+    const section = ['guest-starts','guest-prizes','guest-weather'].includes(id) ? document.getElementById(id) : null;
+    const viewId = section ? 'program' : id;
+    views.forEach(v=>v.classList.toggle('active',v.id===viewId));
+    document.querySelectorAll('.nav-btn').forEach(b=>b.classList.toggle('active',b.dataset.go===viewId));
+    if (section && !section.hidden) section.scrollIntoView();
+    else window.scrollTo({top:0,behavior:'instant'});
+    history.replaceState(null,'','#'+id);
+  }
+  buttons.forEach(b=>b.addEventListener('click',()=>show(b.dataset.go)));
+  const initial=location.hash.slice(1);if(buttons.some(b=>b.dataset.go===initial))show(initial);
+</script>
+  <script src="./install.js"></script>
+  <script src="./event.js" defer></script>
+</body>
+</html>

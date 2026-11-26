@@ -1,0 +1,123 @@
+<!doctype html>
+<html lang="da">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>Company Days · Lyngbygaard Golf</title>
+<style>
+:root{color-scheme:light;font:16px/1.5 system-ui,sans-serif;color:#17362d;background:#f6f5ef;--green:#123e31;--border:#d4ddd6}
+*{box-sizing:border-box}body{margin:0}header{background:var(--green);color:white;padding:1rem max(1rem,calc((100% - 1080px)/2));display:flex;gap:1rem;align-items:center;justify-content:space-between}
+header img{width:48px;height:48px;object-fit:contain}header div{display:flex;gap:.75rem;align-items:center}header a{color:white}main{max-width:1120px;margin:auto;padding:1.5rem 1rem 4rem}
+h1,h2,h3,p{margin:0 0 .7rem}h1{font-size:clamp(2rem,5vw,3rem);line-height:1.12}h2{font-size:1.4rem}h3{font-size:1.1rem}button,input,textarea,select{font:inherit}
+button,.button{display:inline-flex;align-items:center;justify-content:center;cursor:pointer;text-decoration:none;color:var(--green);background:#fff;border:1px solid var(--border);border-radius:.55rem;padding:.6rem .85rem;min-height:44px;font-weight:650}
+button:disabled{opacity:.6;cursor:wait}.primary{background:var(--green);color:white;border-color:var(--green)}a{color:var(--green)}
+.layout{display:grid;grid-template-columns:minmax(240px,1fr) minmax(0,2.4fr);gap:1rem;margin-top:1rem;align-items:start}.panel,fieldset{background:white;padding:1rem;border:1px solid var(--border);border-radius:.8rem;margin:0 0 1rem;min-width:0}
+fieldset{padding:1rem}legend{font-weight:750;padding:0 .4rem}.actions{display:flex;align-items:center;flex-wrap:wrap;gap:.55rem;margin-bottom:.7rem}.list{display:grid;gap:.55rem}.list button{display:block;text-align:left;width:100%;overflow-wrap:anywhere}.list button[aria-current=true]{outline:2px solid var(--green);outline-offset:-2px}.list small{display:block;font-weight:400}
+label{display:block;font-weight:650;min-width:0}input:not([type=checkbox]),textarea,select{display:block;width:100%;margin:.22rem 0 .55rem;padding:.5rem .6rem;color:inherit;background:white;border:1px solid #a9b8ad;border-radius:.35rem}
+textarea{min-height:4.5rem;resize:vertical}.two,.row{display:grid;grid-template-columns:1fr 1fr;gap:.6rem}.row{padding:.65rem 0;border-top:1px solid var(--border);grid-template-columns:100px 1fr}.row.extras,.row.prizes,.row.sponsors{grid-template-columns:1fr}.row .full{grid-column:1/-1}.row textarea{min-height:3rem}.checkboxes label{display:inline-block;margin:0 1rem .4rem 0}
+#status{min-height:1.5em;font-weight:650}#status[data-error=true]{color:#9c2821}.muted{color:#52695e}button:focus-visible,a:focus-visible{outline:3px solid #b28026;outline-offset:2px}[hidden]{display:none!important}
+@media(max-width:720px){.layout{grid-template-columns:1fr}.two{grid-template-columns:1fr}}
+</style>
+<script src="/admin.js" defer></script>
+</head>
+<body>
+<header><div><img src="/lyg-logo.png" alt=""><strong>Lyngbygaard Golf</strong></div><a href="/">Gæsteapp</a></header>
+<main>
+<h1>Company Days</h1>
+<p class="muted">Opret et arrangement fra en skabelon, eller kopiér en tidligere Company Day.</p>
+<div class="layout">
+  <aside class="panel">
+    <h2>Arrangementer</h2>
+    <div class="actions"><button id="new" class="primary">Ny fra skabelon</button></div>
+    <div id="events" class="list"></div>
+  </aside>
+  <section aria-label="Redigering">
+    <p id="status" role="status"></p>
+    <form id="editor" hidden>
+      <div class="actions"><button type="submit" class="primary">Gem kladde</button><a id="preview" class="button" target="_blank" rel="noopener" hidden>Forhåndsvis</a><button id="copy" type="button">Kopiér arrangement</button></div>
+      <fieldset>
+        <legend>Arrangement og kunde</legend>
+        <div class="two"><label>Titel<input name="title" maxlength="100" required></label><label>Virksomhed<input name="company" maxlength="100" required></label>
+        <label>Dato<input name="date" type="date" required></label><label>Mødetid<input name="arrival" type="time" required></label></div>
+        <label>Mødested<input name="venue" maxlength="180" required></label>
+        <label>Kundens logo (HTTPS-billedlink)<input name="logo" type="url" placeholder="https://…" maxlength="1200"></label>
+        <label>Velkomsthilsen<textarea name="welcome" maxlength="1500"></textarea></label>
+      </fieldset>
+      <fieldset>
+        <legend>Dagens program</legend>
+        <p class="muted">Programpunkter vises i rækkefølge efter tidspunkt.</p>
+        <div id="program"></div>
+        <button type="button" id="add-program">Tilføj programpunkt</button>
+      </fieldset>
+      <fieldset>
+        <legend>Starttider</legend>
+        <p class="muted">Tilføj starttid og eventuelt starthul for hvert hold. Ved gunstart kan flere hold have samme starttid.</p>
+        <div id="starts"></div>
+        <button type="button" id="add-starts">Tilføj starttid</button>
+      </fieldset>
+      <fieldset>
+        <legend>Præmier</legend>
+        <p class="muted">Tilføj fx holdpræmie, længste drive eller nærmest flaget. Sektionen vises, når der er udfyldt en præmie.</p>
+        <div id="prizes"></div>
+        <button type="button" id="add-prizes">Tilføj præmie</button>
+      </fieldset>
+      <fieldset>
+        <legend>Løbende infobjælke i bunden</legend>
+        <label>Kort besked<textarea name="bulletin" maxlength="180" placeholder="Fx Ny mødetid kl. 09.00 i klubhuset"></textarea></label>
+      </fieldset>
+      <fieldset>
+        <legend>Sponsorer</legend>
+        <p class="muted">Vælg placering på forsiden eller ved præmierne for hver sponsor.</p>
+        <div id="sponsors"></div>
+        <button type="button" id="add-sponsors">Tilføj sponsor</button>
+      </fieldset>
+      <fieldset>
+        <legend>Dagens info · pop op</legend>
+        <p class="muted">Skriv en kort vejrbesked og et forslag til tøj. Gæsterne ser de udfyldte felter, når de åbner arrangementet.</p>
+        <label>Vejr<textarea name="weather" maxlength="300" placeholder="Fx mulighed for byger om formiddagen"></textarea></label>
+        <label>Påklædning<textarea name="clothing" maxlength="500" placeholder="Fx regnjakke, lag på lag og sko med godt greb"></textarea></label>
+      </fieldset>
+      <fieldset>
+        <legend>Praktisk information og kundens ønsker</legend>
+        <label>Besked til gæsterne<textarea name="notice" maxlength="1500"></textarea></label>
+        <p class="muted">Tilføj fx menu, transport, holdinfo, dresscode eller et link til en evaluering.</p>
+        <div id="extras"></div>
+        <button type="button" id="add-extras">Tilføj informationsfelt</button>
+      </fieldset>
+      <fieldset>
+        <legend>Kontaktpersoner</legend>
+        <p class="muted">Udfyld navn og rolle samt eventuelt telefon og e-mail. Gæsterne finder kontakterne under Program.</p>
+        <h3>Før Company Day</h3>
+        <label>Navn og rolle<textarea name="contactBefore" maxlength="500" rows="2"></textarea></label>
+        <div class="two"><label>Telefon<input name="beforePhone" type="tel" maxlength="35"></label><label>E-mail<input name="beforeEmail" type="email" maxlength="254"></label></div>
+        <h3>Under Company Day</h3>
+        <label>Navn og rolle<textarea name="contact" maxlength="500" rows="2"></textarea></label>
+        <div class="two"><label>Telefon<input name="duringPhone" type="tel" maxlength="35"></label><label>E-mail<input name="duringEmail" type="email" maxlength="254"></label></div>
+        <h3>Efter Company Day</h3>
+        <label>Navn og rolle<textarea name="contactAfter" maxlength="500" rows="2"></textarea></label>
+        <div class="two"><label>Telefon<input name="afterPhone" type="tel" maxlength="35"></label><label>E-mail<input name="afterEmail" type="email" maxlength="254"></label></div>
+      </fieldset>
+      <fieldset class="checkboxes">
+        <legend>Faste faner</legend>
+        <label><input type="checkbox" name="sections" value="club"> Klubben</label>
+        <label><input type="checkbox" name="sections" value="beginner"> Begynder</label>
+        <label><input type="checkbox" name="sections" value="business"> Erhverv</label>
+      </fieldset>
+      <div class="panel">
+        <h2>Udgivelse</h2>
+        <p id="publication"></p>
+        <p class="muted">Appen kræver adgang via ChatGPT. Gæstelinket åbner for personer med adgang til appen.</p>
+        <div class="actions">
+          <button type="button" id="publish" class="primary">Udgiv til gæster</button>
+          <a id="guest-link" class="button" target="_blank" rel="noopener" hidden>Åbn gæstelink</a>
+          <button type="button" id="copy-link" hidden>Kopiér gæstelink</button>
+          <button type="button" id="unpublish" hidden>Træk udgivelse tilbage</button>
+        </div>
+      </div>
+    </form>
+  </section>
+</div>
+</main>
+</body>
+</html>
